@@ -1,0 +1,23 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+
+# Load dataset
+df = pd.read_csv("Mall_Customers.csv")
+X = df[["Age","Annual Income (k$)","Spending Score (1-100)"]]
+
+# K-Means
+kmeans = KMeans(n_clusters=3, random_state=42)
+df["Group"] = kmeans.fit_predict(X)
+
+# Label groups
+labels = ["Low Spenders","Medium Spenders","High Spenders"]
+df["Group"] = df["Group"].map(dict(enumerate(labels)))
+
+# Visualize
+plt.scatter(df["Age"], df["Spending Score (1-100)"], c=kmeans.labels_)
+plt.show()
+
+# Output
+print(df[["Age","Annual Income (k$)","Spending Score (1-100)","Group"]].head())
