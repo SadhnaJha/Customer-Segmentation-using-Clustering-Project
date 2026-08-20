@@ -4,19 +4,20 @@ from sklearn.cluster import KMeans
 
 # Load dataset
 df = pd.read_csv("Mall_Customers.csv")
-X = df[["Age","Annual Income (k$)","Spending Score (1-100)"]]
 
-# K-Means
-kmeans = KMeans(n_clusters=3, random_state=42)
-df["Group"] = kmeans.fit_predict(X)
+# Select features
+X = df[["Age", "Annual Income (k$)", "Spending Score (1-100)"]]
 
-# Label groups
-labels = ["Low Spenders","Medium Spenders","High Spenders"]
-df["Group"] = df["Group"].map(dict(enumerate(labels)))
+# Create clusters
+model = KMeans(n_clusters=3, random_state=42)
+df["Group"] = model.fit_predict(X)
 
-# Visualize
-plt.scatter(df["Age"], df["Spending Score (1-100)"], c=kmeans.labels_)
+# Show clusters
+plt.scatter(df["Age"], df["Spending Score (1-100)"], c=df["Group"])
+plt.xlabel("Age")
+plt.ylabel("Spending Score")
+plt.title("Customer Segmentation")
 plt.show()
 
-# Output
-print(df[["Age","Annual Income (k$)","Spending Score (1-100)","Group"]].head())
+# Display result
+print(df.head())
